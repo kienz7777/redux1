@@ -9,10 +9,15 @@ import {firebaseConnect} from './firebaseConnect.js';
 class App extends Component {
 
   pushData = () => {
-    var connectData = firebase.database().ref('dataForNote/');
+    var connectData = firebase.database().ref('dataForNote');
     connectData.push({
       title : "hello"
     })
+  }
+
+  deleteData = (id) => {
+    var connectData = firebase.database().ref('dataForNote');
+    connectData.child(id).remove()
   }
 
   render() {
@@ -20,6 +25,9 @@ class App extends Component {
     return (
       <div className = "App">
         <button onClick = {()=>this.pushData()}>Click để thêm mới bằng hàm push firebase</button>
+        <hr/>
+
+        <button onClick = {()=>this.deleteData('-M0rqEfGNqye0axStRXW')}>Click để xóa bằng hàm remove firebase</button>
       </div>
     )
   }
