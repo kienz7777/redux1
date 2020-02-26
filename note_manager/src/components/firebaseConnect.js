@@ -1,5 +1,4 @@
-
-import * as firebase from 'firebase'
+import * as firebase from 'firebase';
 
 const firebaseConfig = {
     apiKey: "AIzaSyBS1Eg5aUMQAQ3SfNjgfvXRJcRVn-mrXec",
@@ -12,15 +11,6 @@ const firebaseConfig = {
     measurementId: "G-3NPKE9PY13"
   };
 
-export const firebaseConnect =  firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig);
 
-var data = firebase.database().ref('dataForNote/note1'); 
-data.once('value').then(function(snapshot){
-  console.log(snapshot.val());
-})
-
-data.set({
-  id:3,
-  title:"helooeee"
-  // ,new : "thêm mới"    // thêm mới cách 2 dùng set, ko tự sinh giá trị id
-})
+export const noteData = firebase.database().ref('dataForNote')
