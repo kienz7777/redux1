@@ -1,38 +1,71 @@
 import React, { Component } from 'react'
+import NoteItem from './NoteItem'
+
+import {noteData}  from './firebaseConnect'
 
 export default class NoteList extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            dataFirebase : []
+        }
+        
+    }
+    
+    
+    UNSAFE_componentWillMount() {
+        noteData.on('value', (notes) => {
+            var arrayData = [];
+
+            notes.forEach(element => {
+                const id = element.key;
+                const noteTitle = element.val().noteTitle;
+                const noteContent = element.val().noteContent;
+
+                arrayData.push({
+                    id : id,
+                    noteTitle : noteTitle,
+                    noteContent : noteContent
+                })
+            })
+
+            this.setState({
+                dataFirebase : arrayData
+            })
+
+            // console.log(notes.val());
+            // console.log(arrayData);
+        })
+    }
+    
+
+    getData = () => {
+        if(this.state.dataFirebase)
+        {
+            return this.state.dataFirebase.map((value,key)=>{
+                return(
+                    <NoteItem
+                    key = {key}
+                    id = {key}
+                    noteTitle = {value.noteTitle}
+                    noteContent = {value.noteContent}
+                    />
+                )
+            })
+        }
+    }
+
     render() {
+
         return (
             <div className="col">
                 <div id="noteList" role="tablist" aria-multiselectable="true">
-                    <div className="card">
-                        <div className="card-header" role="tab" id="note1">
-                            <h5 className="mb-0">
-                                <a data-toggle="collapse" data-parent="#noteList" href="#noteContent1" aria-expanded="true" aria-controls="noteContent1">
-                                    Ghi chú ngày 24/02/2020
-                                </a>
-                            </h5>
-                        </div>
-                        <div id="noteContent1" className="collapse in" role="tabpanel" aria-labelledby="note1">
-                            <div className="card-body">
-                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cum eos nisi fugiat sequi dolore beatae velit incidunt, quasi perspiciatis, eum quos ipsam, obcaecati culpa magni nam dignissimos quis assumenda voluptas.
-                            </div>
-                        </div>
-                    </div>
-                    <div className="card">
-                        <div className="card-header" role="tab" id="note2">
-                            <h5 className="mb-0">
-                                <a data-toggle="collapse" data-parent="#noteList" href="#noteContent2" aria-expanded="true" aria-controls="noteContent2">
-                                    Ghi chú ngày 24/02/2020
-                                </a>
-                            </h5>
-                        </div>
-                        <div id="noteContent2" className="collapse in" role="tabpanel" aria-labelledby="note2">
-                            <div className="card-body">
-                                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Cum eos nisi fugiat sequi dolore beatae velit incidunt, quasi perspiciatis, eum quos ipsam, obcaecati culpa magni nam dignissimos quis assumenda voluptas.
-                            </div>
-                        </div>
-                    </div>
+                    
+                    {this.getData()}
+
+                    
                 </div>
             </div>
 

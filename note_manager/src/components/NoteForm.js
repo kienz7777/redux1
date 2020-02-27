@@ -18,8 +18,8 @@ import {connect} from 'react-redux'
         const name = event.target.name;
         const value = event.target.value;
 
-        console.log(name);
-        console.log(value);
+        //console.log(name);
+        //console.log(value);
         this.setState({
             [name]: value
         })
@@ -33,7 +33,7 @@ import {connect} from 'react-redux'
         // //console.log(item);
         // // gửi item lên trên app để app xử lý
         // this.props.getData(item);
-        item = JSON.stringify(item);
+        //item = JSON.stringify(item);
 
         this.props.addDataStore(item);
     }
