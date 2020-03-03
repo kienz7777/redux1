@@ -1,6 +1,20 @@
 import React, { Component } from 'react'
 
-export default class NoteItem extends Component {
+import {connect} from 'react-redux';
+
+class NoteItem extends Component {
+
+    twoAction = () => {
+        this.props.changeEditStatus();
+        console.log(this.props.note);
+
+        this.props.getEditData(this.props.note);
+    }
+
+    deleteData = () => {
+        this.props.getDeleteData(this.props.note.id)
+    }
+
     render() {
         return (
             <div className="card">
@@ -11,8 +25,8 @@ export default class NoteItem extends Component {
                         </a>
 
                         <div className = "btn-group float-right">
-                            <button className = "btn btn-outline-info"> Sửa </button>
-                            <button className = "btn btn-outline-secondary"> Xóa </button>
+                            <button onClick ={() => this.twoAction()} className = "btn btn-outline-info"> Sửa </button>
+                            <button onClick ={() => this.deleteData()} className = "btn btn-outline-secondary"> Xóa </button>
                         </div>
                     </h5>
                 </div>
@@ -26,3 +40,28 @@ export default class NoteItem extends Component {
         )
     }
 }
+
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        changeEditStatus: () => {
+            dispatch({type : "CHANGE_EDIT_STATUS"})
+        },
+
+        getEditData: (editObject) => {
+            dispatch({
+                type : "GET_EDIT_DATA",
+                editObject
+            })
+        }
+        ,
+        getDeleteData: (deleteID) => {
+            dispatch({
+                type : "DELETE",
+                deleteID
+            })
+        }
+    }
+}
+
+export default connect(null, mapDispatchToProps)(NoteItem)

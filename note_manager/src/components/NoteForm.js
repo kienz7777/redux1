@@ -7,12 +7,23 @@ import {connect} from 'react-redux'
         super(props);
 
         this.state = {
-            noteTile: '',
+            noteTitle: '',
             noteContent: '',
-
+            id : ''
         }
     }
 
+    UNSAFE_componentWillMount() {
+        if(this.props.editItem){
+            this.setState({
+                noteTitle : this.props.editItem.noteTitle,
+                noteContent : this.props.editItem.noteContent,
+                id : this.props.editItem.id
+
+            })
+        }
+    }
+    
 
     isChange = (event) => {
         const name = event.target.name;
@@ -26,16 +37,30 @@ import {connect} from 'react-redux'
     }
 
     addData = (title,content) => {
-        var item = {}
-        item.noteTitle = title;
-        item.noteContent = content;
 
-        // //console.log(item);
-        // // gửi item lên trên app để app xử lý
-        // this.props.getData(item);
-        //item = JSON.stringify(item);
+        if(this.state.id){
+            var editobject = {}
+            editobject.id = this.state.id;
+            editobject.noteTitle = this.state.noteTitle;
+            editobject.noteContent = this.state.noteContent;
 
-        this.props.addDataStore(item);
+            this.props.editDataStore(editobject);
+            this.props.changeEditStatus();  //đóng form
+        }
+
+        else{
+            var item = {}
+            item.noteTitle = title;
+            item.noteContent = content;
+    
+            // //console.log(item);
+            // // gửi item lên trên app để app xử lý
+            // this.props.getData(item);
+            //item = JSON.stringify(item);
+    
+            this.props.addDataStore(item);
+        }
+       
     }
 
     render() {
@@ -48,15 +73,15 @@ import {connect} from 'react-redux'
 
                     <div className="form-group">
                         <label >Tiêu đề note</label>
-                        <input onChange={(event) =>  this.isChange(event) } name="noteTile" className="form-control" placeholder="Tiêu đề note" />
+                        <input defaultValue = {this.props.editItem.noteTitle} onChange={(event) =>  this.isChange(event) } name="noteTitle"  className="form-control" placeholder="Tiêu đề note" />
                         <small id="helpId" className="form-text text-muted">Điền tiêu đề </small>
                     </div>
                     <div className="form-group">
                         <label >Nội dung note</label>
-                        <textarea onChange={(event) =>  this.isChange(event) } name="noteContent" className="form-control" placeholder="Nội dung note" defaultValue={" "} />
+                        <textarea defaultValue = {this.props.editItem.noteContent} onChange={(event) =>  this.isChange(event) } name="noteContent" className="form-control" placeholder="Nội dung note"  />
                         <small id="helpId" className="form-text text-muted">Điền nội dung</small>
                     </div>
-                    <button type="reset" onClick = {() => this.addData(this.state.noteTile,this.state.noteContent)} className="btn btn-primary btn-block">Lưu</button>
+                    <button type="reset" onClick = {() => this.addData(this.state.noteTitle,this.state.noteContent)} className="btn btn-primary btn-block">Lưu</button>
 
                 </form>
             </div>
@@ -65,6 +90,11 @@ import {connect} from 'react-redux'
     }
 }
 
+const mapStateToProps = (state, ownProps) => {
+    return {
+        editItem: state.editItem
+    }
+}
 
 
 const mapDispatchToProps = (dispatch, ownProps) => {
@@ -72,7 +102,14 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         addDataStore: (getItem) => {
             dispatch({type:'ADD_DATA',getItem})
         }
+        ,
+        editDataStore: (getItem) => {
+            dispatch({type:'EDIT',getItem})
+        },
+        changeEditStatus: () => {
+            dispatch({type : "CHANGE_EDIT_STATUS"})
+        }
     }
 }
 
-export default connect(null,mapDispatchToProps)(NoteForm)
+export default connect(mapStateToProps,mapDispatchToProps)(NoteForm)

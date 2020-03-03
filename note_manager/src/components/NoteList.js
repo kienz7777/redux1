@@ -51,6 +51,8 @@ export default class NoteList extends Component {
                     id = {key}
                     noteTitle = {value.noteTitle}
                     noteContent = {value.noteContent}
+
+                    note = {value}
                     />
                 )
             })
