@@ -1,6 +1,18 @@
 import React, { Component } from 'react'
 
-export default class Nav extends Component {
+import {connect} from 'react-redux';
+
+class Nav extends Component {
+
+    handleAdd = (event) => {
+        event.preventDefault();
+        this.props.changeEditStatus();
+        this.props.changeTitleAdd();
+
+
+        this.props.setAlertFalse();// ko hiển thị alert
+    }
+
     render() {
         return (
             <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
@@ -12,7 +24,7 @@ export default class Nav extends Component {
                             <a className="nav-link" href="https://www.youtube.com/">Home <span className="sr-only">(current)</span></a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link" href="https://www.youtube.com/">Xem Danh Sách</a>
+                            <a className="nav-link" onClick ={(event) => this.handleAdd(event)} href="https://www.youtube.com/">Thêm Ghi Chú</a>
                         </li>
                     </ul>
                 </div>
@@ -21,3 +33,21 @@ export default class Nav extends Component {
         )
     }
 }
+
+const mapDispatchToProps = (dispatch, ownProps) => {
+    return {
+        changeEditStatus: () => {
+            dispatch({type : "CHANGE_EDIT_STATUS"})
+        },
+
+        changeTitleAdd: () => {
+            dispatch({type : "CHANGE_TITLE_ADD"})
+        },
+        
+        setAlertFalse: () => {
+            dispatch({type : "SET_ALERT_FALSE"})
+        }
+    }
+}
+
+export default connect(null, mapDispatchToProps)(Nav)

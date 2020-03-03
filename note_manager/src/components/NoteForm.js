@@ -38,7 +38,7 @@ import {connect} from 'react-redux'
 
     addData = (title,content) => {
 
-        if(this.state.id){
+        if(this.state.id){      //Sửa
             var editobject = {}
             editobject.id = this.state.id;
             editobject.noteTitle = this.state.noteTitle;
@@ -46,9 +46,11 @@ import {connect} from 'react-redux'
 
             this.props.editDataStore(editobject);
             this.props.changeEditStatus();  //đóng form
+
+            this.props.changeAlertStatus(); //thay đổi trạng thái hiển thị Alert
         }
 
-        else{
+        else{               //Thêm
             var item = {}
             item.noteTitle = title;
             item.noteContent = content;
@@ -59,6 +61,8 @@ import {connect} from 'react-redux'
             //item = JSON.stringify(item);
     
             this.props.addDataStore(item);
+
+            this.props.changeAlertStatus();//thay đổi trạng thái hiển thị Alert
         }
        
     }
@@ -67,7 +71,7 @@ import {connect} from 'react-redux'
 
         return (
             <div className="col-4">
-                <h3>Sửa nội dung </h3>
+                <h3>{this.props.title} ghi chú</h3>
                 <form>
 
 
@@ -92,7 +96,8 @@ import {connect} from 'react-redux'
 
 const mapStateToProps = (state, ownProps) => {
     return {
-        editItem: state.editItem
+        editItem: state.editItem,
+        title : state.title
     }
 }
 
@@ -108,6 +113,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
         },
         changeEditStatus: () => {
             dispatch({type : "CHANGE_EDIT_STATUS"})
+        },
+        changeAlertStatus: () => {
+            dispatch({type : "CHANGE_ALERT_STATUS"})
         }
     }
 }

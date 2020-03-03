@@ -5,6 +5,7 @@ import NoteList from './NoteList';
 import NoteForm from './NoteForm';
 
 import {connect} from 'react-redux';
+import AlertInfo from './AlertInfo';
 
 class App extends Component {
 
@@ -23,6 +24,11 @@ class App extends Component {
     return (
       <div>
         <Nav/>
+
+        <div >
+          <AlertInfo/>
+        </div>
+        
 
         <div className = "container">
           <div className = "row">
